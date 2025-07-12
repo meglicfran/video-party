@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video - party</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="player-container">
+        <video controls id="player">
+            <source src="../video/flower.webm" type="video/webm" />
+        </video>
+    </div>
+    <div class="status-container">
+        <p class="status" id="status">
+            Status
+        </p>
+    </div>
+    <div class="button-container">
+        <button class="button" id="play">Play</button>
+        <button class="button" id="stop">Stop</button>
+    </div>
+    <div class="seek-container">
+        <input type="number" id="seek" class="seek"/>
+        <button class="button" id="seek-button">Seek</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
