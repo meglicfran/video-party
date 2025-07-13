@@ -7,10 +7,19 @@ const wss = new WebSocket.Server({ port: 8080 });
 
 var clients = []
 
+function printClientIds(){
+    ids = []
+    for(var client of clients){
+        ids.push(client.id)
+    }
+    console.log(ids)
+}
+
 wss.on('connection', (ws) => {
     ws.id = uuidv4();
     clients.push(ws);
     console.log('Client connected ' + ws.id);
+    printClientIds()
 
     // Receive message from client
     ws.on('message', (rawData) => {
@@ -29,5 +38,6 @@ wss.on('connection', (ws) => {
         clients = clients.filter((client) => {
             return client.id !== ws.id
         })
+        printClientIds()
     });
 });

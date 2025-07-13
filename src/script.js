@@ -4,8 +4,10 @@ var videoPlayer = document.getElementById("player")
 var statusText = document.getElementById("status")
 var playButton = document.getElementById("play")
 var stopButton = document.getElementById("stop")
+/*
 var seekButton = document.getElementById("seek-button")
 var seekInput = document.getElementById("seek")
+*/
 
 const ws = new WebSocket('ws://localhost:8080')
 
@@ -22,7 +24,9 @@ ws.onmessage = (event) => {
     sendEvent = false;
     videoPlayer.currentTime = stateObj.currentTime;
     stateObj.paused ? videoPlayer.pause() : videoPlayer.play();
-    sendEvent = true;
+    setTimeout(()=>{
+        sendEvent=true;
+    }, 100)
 };
 
 ws.onclose = () => {
@@ -30,7 +34,8 @@ ws.onclose = () => {
 };
 
 videoPlayer.addEventListener('play', (event) => {
-    console.log("Video player play event " + videoPlayer.currentTime)
+    //console.log("Video player play event " + videoPlayer.currentTime)
+    printState()
     statusText.innerHTML = "Video player play event"
     if(sendEvent){
         sendState()
@@ -38,13 +43,14 @@ videoPlayer.addEventListener('play', (event) => {
 })
 
 videoPlayer.addEventListener('pause', (event) => {
-    console.log("Video player pause event " + videoPlayer.currentTime)
+    //console.log("Video player pause event " + videoPlayer.currentTime)
+    printState()
     statusText.innerHTML = "Video player pause event"
     if(sendEvent){
         sendState()
     }
 })
-
+/* 
 videoPlayer.addEventListener('seeking', (event) => {
     console.log("Video player seeking event " + videoPlayer.currentTime)
     statusText.innerHTML = "Video player seeking event"
@@ -54,12 +60,14 @@ videoPlayer.addEventListener('seeking', (event) => {
 })
 
 videoPlayer.addEventListener('seeked', (event) => {
-    console.log("Video player seeked event " + videoPlayer.currentTime)
+    //console.log("Video player seeked event " + videoPlayer.currentTime)
+    printState()
     statusText.innerHTML = "Video player seeked event"
     if(sendEvent){
         sendState()
     }
 })
+*/
 
 playButton.addEventListener("click", (event) => {
     console.log("Play button clicked!")
@@ -74,7 +82,7 @@ stopButton.addEventListener("click", (event) => {
         videoPlayer.pause()
     }
 })
-
+/*
 seekButton.addEventListener("click", (event) => {
     console.log("Seek button clicker!")
     var seekPosition = seekInput.valueAsNumber
@@ -82,10 +90,16 @@ seekButton.addEventListener("click", (event) => {
         videoPlayer.currentTime = seekPosition
     }
 })
+*/
 
 function sendState() {
     var payloadObj = { paused: videoPlayer.paused, currentTime: videoPlayer.currentTime }
     var payloadJSON = JSON.stringify(payloadObj)
     ws.send(payloadJSON)
+}
+
+function printState(){
+    var payloadObj = { paused: videoPlayer.paused, currentTime: videoPlayer.currentTime }
+    console.log(payloadObj)
 }
 
