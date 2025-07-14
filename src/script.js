@@ -5,6 +5,8 @@ const playButton = document.getElementById("play")
 const stopButton = document.getElementById("stop")
 const progressBar = document.getElementById('progress-bar');
 const progressContainer = document.querySelector('.progress-container');
+const fileInput = document.getElementById("fileInput")
+const submit = document.getElementById("submit")
 
 /* Custom video controlls event listeners */
 videoPlayer.addEventListener('timeupdate', () => {
@@ -82,6 +84,20 @@ ws.onclose = () => {
     console.log('Disconnected from server');
 };
 
+/* Select file*/
+submit.addEventListener("click", (event) => {
+    if(fileInput) fileInput.click();
+})
+
+fileInput.addEventListener("change", (event) => {
+    var file = fileInput.files[0];
+    console.log(file);
+    var fileURL = window.URL.createObjectURL(file);
+    console.log(fileURL);
+    videoPlayer.src = fileURL;
+})
+
+/* Util functions */
 function sendState() {
     var payloadObj = { paused: videoPlayer.paused, currentTime: videoPlayer.currentTime }
     var payloadJSON = JSON.stringify(payloadObj)

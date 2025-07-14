@@ -11,6 +11,7 @@
     <div class="player-container">
         <video id="player">
             <source src="../video/flower.webm" type="video/webm" />
+            <p>Error loading video</p>
         </video>
     </div>
     <div class="progress-container">
@@ -20,6 +21,12 @@
         <button class="button" id="play">Play</button>
         <button class="button" id="stop">Stop</button>
     </div>
+    <div class="select-container">
+        <label>Select video</label>
+        <input class="button" type="file" accept="video/*" id="fileInput">
+        <button class="button" id="submit">Select</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
