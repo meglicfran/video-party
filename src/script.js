@@ -1,13 +1,29 @@
 console.log("Hello!")
 
-var videoPlayer = document.getElementById("player")
-var statusText = document.getElementById("status")
-var playButton = document.getElementById("play")
-var stopButton = document.getElementById("stop")
+const videoPlayer = document.getElementById("player")
+const statusText = document.getElementById("status")
+const playButton = document.getElementById("play")
+const stopButton = document.getElementById("stop")
+const progressBar = document.getElementById('progress-bar');
+const progressContainer = document.querySelector('.progress-container');    
+
 /*
 var seekButton = document.getElementById("seek-button")
 var seekInput = document.getElementById("seek")
 */
+
+videoPlayer.addEventListener('timeupdate', () => {
+  const percent = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+  progressBar.style.width = percent + '%';
+});
+
+progressContainer.addEventListener('click', (e) => {
+  const rect = progressContainer.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const percent = x / rect.width;
+  videoPlayer.currentTime = percent * videoPlayer.duration;
+});
+
 
 const ws = new WebSocket('ws://localhost:8080')
 
