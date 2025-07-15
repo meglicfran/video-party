@@ -12,52 +12,52 @@ body {
   line-height: 1.6;
 }
 
-.player-container{
-    margin-top: 50px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+.player-container {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 #player {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.status-container{
-    margin-top: 50px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+.status-container {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .status {
-    font-weight: bold;
-    font-size: 2rem;
+  font-weight: bold;
+  font-size: 2rem;
 }
 
 .button-container {
-    margin: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .button {
-    padding: 5px;
-    font-size: 1.5rem;
-    margin: 5px;
+  padding: 5px;
+  font-size: 1.5rem;
+  margin: 5px;
 }
 
-.seek-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+.seek-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .seek {
-    margin: 10px;
-    font-size: 1.5rem;
+  margin: 10px;
+  font-size: 1.5rem;
 }
 
 .progress-container {
@@ -92,19 +92,19 @@ body {
 }
 
 .select-container {
-    background-color: gray;
-    padding: 25px;
-    border-radius: 15px;
-    margin: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  background-color: gray;
+  padding: 25px;
+  border-radius: 15px;
+  margin: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .select-container label {
-    font-size: 1.8rem;
+  font-size: 1.8rem;
 }
 
 #fileInput {
-    display: none;
+  display: none;
 }
