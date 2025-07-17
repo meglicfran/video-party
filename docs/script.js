@@ -69,7 +69,7 @@ stopButton.addEventListener("click", (event) => {
 })
 
 /*  Websocket event listeners: */
-const ws = new WebSocket('ws://localhost:8080')
+const ws = new WebSocket('ws://websocket-server-9tc2.onrender.com')
 ws.onopen = () => {
     console.log('Connected to server');
     joinContainer.classList.remove("hidden")

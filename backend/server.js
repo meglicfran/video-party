@@ -18,7 +18,8 @@ const ERROR = 2;
 const SYNC = 1;
 const CONTROL = 0;
 
-const wss = new WebSocket.Server({ port: 8080 });
+const PORT = process.env.PORT || 3000;
+const wss = new WebSocket.Server({ port: PORT });
 
 var clients = new Map();
 var rooms = new Map();
