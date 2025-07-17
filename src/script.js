@@ -1,4 +1,10 @@
 console.log("Hello!")
+const roomNumberInput = document.getElementById("room-number-input")
+const joinButton = document.getElementById("join")
+const leaveButton = document.getElementById("leave")
+const joinContainer = document.getElementById("join-container")
+const roomNumberShow = document.getElementById("room-number")
+const appContainer = document.getElementById("app-container");
 const videoPlayer = document.getElementById("player")
 const playButton = document.getElementById("play")
 const stopButton = document.getElementById("stop")
@@ -17,9 +23,24 @@ Websocket message:
         duration: double
     }
 */
+const LEAVE = 4;
+const JOIN = 3;
 const ERROR = 2;
 const SYNC = 1;
 const CONTROL = 0;
+
+/* Room controll event listeners */
+joinButton.addEventListener("click", (event) => {
+    console.log("Trying to join room: " + roomNumberInput.valueAsNumber);
+    sendState(JOIN, roomNumberInput.valueAsNumber, null, null, null);
+})
+
+leaveButton.addEventListener("click", (event)=>{
+    stopButton.click();
+    console.log("Leaving room: " + roomNumberShow.innerHTML);
+    sendState(LEAVE, Number(roomNumberShow.innerHTML), null, null, null);
+})
+
 
 /* Custom video controlls event listeners */
 videoPlayer.addEventListener('timeupdate', () => {
@@ -51,6 +72,7 @@ stopButton.addEventListener("click", (event) => {
 const ws = new WebSocket('ws://localhost:8080')
 ws.onopen = () => {
     console.log('Connected to server');
+    joinContainer.classList.remove("hidden")
 };
 
 ws.onmessage = (event) => {
@@ -69,8 +91,15 @@ ws.onmessage = (event) => {
         return;
     }
 
-    if (stateObj.type == CONTROL) {
+    if (stateObj.type == JOIN) {
+        roomNumberShow.innerHTML = stateObj.message; 
+        joinContainer.classList.add("hidden");
+        appContainer.classList.remove("hidden");
         return;
+    }else if(stateObj.type == LEAVE){
+        roomNumberShow.innerHTML = "";
+        appContainer.classList.add("hidden");
+        joinContainer.classList.remove("hidden");
     }
 
     if (stateObj.type == SYNC) {
@@ -105,6 +134,7 @@ function handleSync(stateObj) {
 
 ws.onclose = () => {
     console.log('Disconnected from server');
+    showToast('Disconnected from server')
 };
 
 /* Select file*/
