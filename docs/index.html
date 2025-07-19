@@ -1,48 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Video - party</title>
+		<link rel="stylesheet" href="./style.css" />
+	</head>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Video - party</title>
-    <link rel="stylesheet" href="./style.css" />
-</head>
+	<body>
+		<div id="toast" class="hidden"></div>
 
-<body>
-    <div id="toast" class="hidden"></div>
-
-    <div class="hidden" id="join-container">
-        <div class="join-room">
-            <input type="number" id="room-number-input"/>
-            <button class="button" id="join" >Join room</button>
-        </div>
-    </div>
-    <div class="hidden" id="app-container">
-        <div class="room-container">
-            <h2>Room:</h2>
-            <h2 id="room-number">8</h2>
-            <button class="button" id="leave">Leave room</button>
-        </div>
-        <div class="player-container">
-            <video id="player">
-                <source src="./video/flower.webm" type="video/webm" />
-                <p>Error loading video</p>
-            </video>
-        </div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="button-container">
-            <button class="button" id="play">Play</button>
-            <button class="button" id="stop">Stop</button>
-        </div>
-        <div class="select-container">
-            <label>Select video</label>
-            <input class="button" type="file" accept="video/*" id="fileInput">
-            <button class="button" id="submit">Select</button>
-        </div>
-    </div>
-    <script src="./script.js"></script>
-</body>
-
+		<div class="hidden" id="join-container">
+			<div class="join-room">
+				<input type="number" id="room-number-input" />
+				<button class="button" id="join">Join room</button>
+			</div>
+		</div>
+		<div class="hidden" id="app-container">
+			<div class="room-container">
+				<h2>Room:</h2>
+				<h2 id="room-number">8</h2>
+				<button class="button" id="leave">Leave room</button>
+			</div>
+			<div class="player-container">
+				<video id="player">
+					<source src="./video/flower.webm" type="video/webm" />
+					<p>Error loading video</p>
+				</video>
+			</div>
+			<div class="progress-container">
+				<div class="progress-bar" id="progress-bar"></div>
+			</div>
+			<div class="button-container">
+				<button class="button" id="play">Play</button>
+				<button class="button" id="stop">Stop</button>
+			</div>
+			<div class="select-container">
+				<label>Select video</label>
+				<input
+					class="button"
+					type="file"
+					accept="video/*"
+					id="fileInput"
+				/>
+				<button class="button" id="submit">Select</button>
+			</div>
+		</div>
+		<script src="./script.js"></script>
+	</body>
 </html>

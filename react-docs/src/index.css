@@ -1,0 +1,126 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Set default font and background */
+body {
+	font-family: Arial, sans-serif;
+	background-color: #333;
+	color: #f9f9f9;
+	line-height: 1.6;
+}
+
+.player-container {
+	margin-top: 50px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+#player {
+	cursor: pointer;
+}
+
+.status-container {
+	margin-top: 50px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.status {
+	font-weight: bold;
+	font-size: 2rem;
+}
+
+.button-container {
+	margin: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.button {
+	padding: 5px;
+	font-size: 1.5rem;
+	margin: 5px;
+}
+
+.seek-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.seek {
+	margin: 10px;
+	font-size: 1.5rem;
+}
+
+.progress-container {
+	width: 100%;
+	height: 10px;
+	background: #ddd;
+	cursor: pointer;
+	margin-top: 5px;
+}
+
+.progress-bar {
+	width: 0%;
+	height: 100%;
+	background: #2196f3;
+}
+
+#toast {
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: #333;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	opacity: 0.9;
+	transition: opacity 0.3s;
+}
+
+.hidden {
+	display: none;
+}
+
+.select-container {
+	background-color: gray;
+	padding: 25px;
+	border-radius: 15px;
+	margin: 25px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.select-container label {
+	font-size: 1.8rem;
+}
+
+#fileInput {
+	display: none;
+}
+
+.room-container {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	margin: 45px;
+}
+
+.join-room {
+	margin: 45px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
