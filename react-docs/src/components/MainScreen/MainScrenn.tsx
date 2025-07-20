@@ -1,30 +1,32 @@
-function MainScreen() {
+import { useRef } from "react";
+import LeaveRoomControl from "../LeaveRoomControl/LeaveRoomControl";
+import VideoControl from "../VideoControl/VideoControl";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
+
+interface VideoState {
+	paused: boolean;
+	currentTime: number;
+	src: string;
+}
+
+interface Prop {
+	roomNumber: number;
+	onLeaveRoom: (room: number) => void;
+	videoState: VideoState;
+}
+
+function MainScreen({ roomNumber, onLeaveRoom, videoState }: Prop) {
+	const videoControl = useRef<tyeVideoControl>(null);
+	const onTimeUpdate = (percent: number) => {};
+
 	return (
-		<div className="" id="app-container">
-			<div className="room-container">
-				<h2>Room:</h2>
-				<h2 id="room-number">8</h2>
-				<button className="button" id="leave">
-					Leave room
-				</button>
-			</div>
-			<div className="player-container">
-				<video id="player">
-					<source src="/flower.webm" type="video/webm" />
-					<p>Error loading video</p>
-				</video>
-			</div>
-			<div className="progress-container">
-				<div className="progress-bar" id="progress-bar"></div>
-			</div>
-			<div className="button-container">
-				<button className="button" id="play">
-					Play
-				</button>
-				<button className="button" id="stop">
-					Stop
-				</button>
-			</div>
+		<div className={roomNumber == -1 ? "hidden" : ""} id="app-container">
+			<LeaveRoomControl
+				roomNumber={roomNumber}
+				onLeaveRoom={onLeaveRoom}
+			/>
+			<VideoPlayer videoState={videoState} onTimeUpdate={onTimeUpdate} />
+			<VideoControl progressBarPercent={progress} ref={} />
 			<div className="select-container">
 				<label>Select video</label>
 				<input

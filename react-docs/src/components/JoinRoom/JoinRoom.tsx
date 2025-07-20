@@ -1,21 +1,26 @@
 import { useState } from "react";
 
 interface Prop {
-	ws: WebSocket;
 	roomNumber: Number;
-	onJoin: () => void;
+	onJoin: (roomNumber: Number) => void;
 }
 
-function JoinRoom({ ws, roomNumber, onJoin }: Prop) {
+function JoinRoom({ roomNumber, onJoin }: Prop) {
 	const [inputValue, setInputValue] = useState("");
 
-	const clickHandler = (event: MouseEvent) => {
+	const clickHandler = (event: React.MouseEvent) => {
 		console.log("Trying to join room: " + inputValue);
-		sendState(JOIN, roomNumberInput.valueAsNumber, null, null, null);
+		//sendState(JOIN, roomNumberInput.valueAsNumber, null, null, null);
+		const inputValueNum = Number(inputValue);
+		if (isNaN(inputValueNum)) {
+			console.error("JoinRoom component: Invalid number!");
+			return;
+		}
+		onJoin(inputValueNum);
 	};
 
 	return (
-		<div className={roomNumber == -1 ? "hidden" : ""} id="join-container">
+		<div className={roomNumber != -1 ? "hidden" : ""} id="join-container">
 			<div className="join-room">
 				<input
 					type="number"
@@ -25,7 +30,7 @@ function JoinRoom({ ws, roomNumber, onJoin }: Prop) {
 						setInputValue(e.target.value);
 					}}
 				/>
-				<button className="button" id="join" onClick={(e) => {}}>
+				<button className="button" id="join" onClick={clickHandler}>
 					Join room
 				</button>
 			</div>
