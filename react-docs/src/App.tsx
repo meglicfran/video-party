@@ -1,7 +1,7 @@
 import Toast from "./components/Toast/Toast";
 import JoinRoom from "./components/JoinRoom/JoinRoom";
 import MainScreen from "./components/MainScreen/MainScrenn";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, createContext } from "react";
 
 /*
 Websocket message:
@@ -34,6 +34,11 @@ const SYNC = 1;
 const CONTROL = 0;
 
 function App() {
+	const VideoContext = createContext({
+		paused: true,
+		currentTime: 0,
+		src: "/flower.webm",
+	});
 	const [videoState, updateVideoState] = useState<VideoState>({
 		paused: true,
 		currentTime: 0,
@@ -68,6 +73,11 @@ function App() {
 				return;
 			}
 
+			if (payloadObj.type == SYNC) {
+				handleSync(stateObj);
+				return;
+			}
+
 			return () => {
 				ws.current?.close();
 			};
@@ -88,14 +98,26 @@ function App() {
 			: console.log("No socket");
 	};
 
+	const progressBarClickHandler = (
+		paused: boolean,
+		currentTime: number,
+		duration: number
+	) => {
+		console.log("App: progress bar clicked");
+		ws.current
+			? sendPayload(SYNC, null, paused, currentTime, duration, ws.current)
+			: console.log("No socket");
+	};
+
 	return (
 		<>
 			<Toast />
 			<JoinRoom roomNumber={currentRoom} onJoin={joinHandler} />
 			<MainScreen
 				roomNumber={currentRoom}
-				onLeaveRoom={leaveRoomHandler}
 				videoState={videoState}
+				onLeaveRoom={leaveRoomHandler}
+				onPorgresBarClick={progressBarClickHandler}
 			/>
 		</>
 	);

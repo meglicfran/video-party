@@ -3,25 +3,18 @@ interface VideoState {
 	currentTime: number;
 	src: string;
 }
-interface Prop {
-	progressBarPercent: number;
-}
+interface Prop {}
 
-function VideoControl({ progressBarPercent }: Prop) {
+function VideoControl({}: Prop) {
 	return (
-		<>
-			<div className="progress-container">
-				<div className="progress-bar" id="progress-bar"></div>
-			</div>
-			<div className="button-container">
-				<button className="button" id="play">
-					Play
-				</button>
-				<button className="button" id="stop">
-					Stop
-				</button>
-			</div>
-		</>
+		<div className="button-container">
+			<button className="button" id="play">
+				Play
+			</button>
+			<button className="button" id="stop">
+				Stop
+			</button>
+		</div>
 	);
 }
 

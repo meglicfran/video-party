@@ -13,20 +13,30 @@ interface Prop {
 	roomNumber: number;
 	onLeaveRoom: (room: number) => void;
 	videoState: VideoState;
+	onPorgresBarClick: (
+		paused: boolean,
+		currentTime: number,
+		duration: number
+	) => void;
 }
 
-function MainScreen({ roomNumber, onLeaveRoom, videoState }: Prop) {
-	const videoControl = useRef<tyeVideoControl>(null);
-	const onTimeUpdate = (percent: number) => {};
-
+function MainScreen({
+	roomNumber,
+	onLeaveRoom,
+	videoState,
+	onPorgresBarClick,
+}: Prop) {
 	return (
 		<div className={roomNumber == -1 ? "hidden" : ""} id="app-container">
 			<LeaveRoomControl
 				roomNumber={roomNumber}
 				onLeaveRoom={onLeaveRoom}
 			/>
-			<VideoPlayer videoState={videoState} onTimeUpdate={onTimeUpdate} />
-			<VideoControl progressBarPercent={progress} ref={} />
+			<VideoPlayer
+				videoState={videoState}
+				onPorgresBarClick={onPorgresBarClick}
+			/>
+			<VideoControl />
 			<div className="select-container">
 				<label>Select video</label>
 				<input
