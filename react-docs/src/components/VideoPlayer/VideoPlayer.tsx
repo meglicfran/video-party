@@ -3,6 +3,7 @@ import { useEffect, useRef, type MouseEvent } from "react";
 interface VideoState {
 	paused: boolean;
 	currentTime: number;
+	duration: number;
 	src: string;
 }
 interface Prop {
@@ -12,17 +13,27 @@ interface Prop {
 		currentTime: number,
 		duration: number
 	) => void;
+	onDurationDiff: () => void;
 }
 
-function VideoPlayer({ videoState, onPorgresBarClick }: Prop) {
+function VideoPlayer({ videoState, onPorgresBarClick, onDurationDiff }: Prop) {
 	const videoPlayer = useRef<HTMLVideoElement>(null);
 	const progressBar = useRef<HTMLDivElement>(null);
 	const progressContainer = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (videoPlayer.current) {
-			videoPlayer.current.currentTime = videoState.currentTime;
+		if (!videoPlayer.current) return;
+		if (
+			videoPlayer.current.duration != videoState.duration &&
+			!isNaN(videoPlayer.current.duration)
+		) {
+			console.log(videoPlayer.current.duration, videoState.duration);
+			onDurationDiff();
+			videoPlayer.current.currentTime = 0;
+			videoPlayer.current.pause();
+			return;
 		}
+		videoPlayer.current.currentTime = videoState.currentTime;
 		videoState.paused
 			? videoPlayer.current?.pause()
 			: videoPlayer.current?.play();

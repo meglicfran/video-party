@@ -24,6 +24,7 @@ interface Payload {
 interface VideoState {
 	paused: boolean;
 	currentTime: number;
+	duration: number;
 	src: string;
 }
 
@@ -34,14 +35,10 @@ const SYNC = 1;
 const CONTROL = 0;
 
 function App() {
-	const VideoContext = createContext({
-		paused: true,
-		currentTime: 0,
-		src: "/flower.webm",
-	});
 	const [videoState, updateVideoState] = useState<VideoState>({
 		paused: true,
 		currentTime: 0,
+		duration: 5.059,
 		src: "/flower.webm",
 	});
 
@@ -61,20 +58,17 @@ function App() {
 
 			if (payloadObj.type == JOIN) {
 				updateCurrentRoom(Number(payloadObj.message));
-				/*
-                updateVideoState({
-					paused: false,
-					currentTime: 0,
-					src: "/flower.webm",
-				});*/
 				return;
 			} else if (payloadObj.type == LEAVE) {
 				updateCurrentRoom(-1);
 				return;
-			}
-
-			if (payloadObj.type == SYNC) {
-				handleSync(stateObj);
+			} else if (payloadObj.type == SYNC) {
+				updateVideoState({
+					paused: payloadObj.paused,
+					currentTime: payloadObj.currentTime,
+					duration: payloadObj.duration,
+					src: videoState.src,
+				});
 				return;
 			}
 
@@ -109,6 +103,19 @@ function App() {
 			: console.log("No socket");
 	};
 
+	const durationDiffHandler = () => {
+		ws.current
+			? sendPayload(
+					ERROR,
+					"Video durations differ",
+					null,
+					null,
+					null,
+					ws.current
+			  )
+			: console.log("No socket");
+	};
+
 	return (
 		<>
 			<Toast />
@@ -118,6 +125,7 @@ function App() {
 				videoState={videoState}
 				onLeaveRoom={leaveRoomHandler}
 				onPorgresBarClick={progressBarClickHandler}
+				onDurationDiff={durationDiffHandler}
 			/>
 		</>
 	);

@@ -6,6 +6,7 @@ import VideoPlayer from "../VideoPlayer/VideoPlayer";
 interface VideoState {
 	paused: boolean;
 	currentTime: number;
+	duration: number;
 	src: string;
 }
 
@@ -18,6 +19,7 @@ interface Prop {
 		currentTime: number,
 		duration: number
 	) => void;
+	onDurationDiff: () => void;
 }
 
 function MainScreen({
@@ -25,6 +27,7 @@ function MainScreen({
 	onLeaveRoom,
 	videoState,
 	onPorgresBarClick,
+	onDurationDiff,
 }: Prop) {
 	return (
 		<div className={roomNumber == -1 ? "hidden" : ""} id="app-container">
@@ -35,6 +38,7 @@ function MainScreen({
 			<VideoPlayer
 				videoState={videoState}
 				onPorgresBarClick={onPorgresBarClick}
+				onDurationDiff={onDurationDiff}
 			/>
 			<VideoControl />
 			<div className="select-container">
