@@ -1,21 +1,19 @@
+import { MsgType, sendPayload } from "../App";
 import { useVideoContext } from "./VideoContext";
+import { useWebSocketContext } from "./WebSocketContext";
 
-interface Prop {
-	onPlayClicked: (currentTIme: number) => void;
-	onStopClicked: (currentTIme: number) => void;
-}
-
-function VideoControl({ onPlayClicked, onStopClicked }: Prop) {
+function VideoControl() {
+	const ws = useWebSocketContext();
 	const timeRef = useVideoContext().currentTime;
 
 	const playClickHandler = () => {
 		const time = timeRef.current;
-		onPlayClicked(time);
+		ws.current ? sendPayload(MsgType.SYNC, null, false, time, null, ws.current) : console.log("No socket");
 	};
 
 	const stopClickHandler = () => {
 		const time = timeRef.current;
-		onStopClicked(time);
+		ws.current ? sendPayload(MsgType.SYNC, null, true, time, null, ws.current) : console.log("No socket");
 	};
 
 	return (

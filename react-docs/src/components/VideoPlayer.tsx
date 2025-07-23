@@ -1,14 +1,14 @@
 import { useEffect, useRef, type MouseEvent } from "react";
-import type { VideoState } from "../App";
-import { useVideoContext, type VideoContextType } from "./VideoContext";
+import { MsgType, sendPayload, type VideoState } from "../App";
+import { useVideoContext } from "./VideoContext";
+import { useWebSocketContext } from "./WebSocketContext";
 
 interface Prop {
 	videoState: VideoState;
-	onPorgresBarClick: (paused: boolean, currentTime: number, duration: number) => void;
-	onDurationDiff: () => void;
 }
 
-function VideoPlayer({ videoState, onPorgresBarClick, onDurationDiff }: Prop) {
+function VideoPlayer({ videoState }: Prop) {
+	const ws = useWebSocketContext();
 	const videoPlayer = useRef<HTMLVideoElement>(null);
 	const progressBar = useRef<HTMLDivElement>(null);
 	const progressContainer = useRef<HTMLDivElement>(null);
@@ -16,13 +16,11 @@ function VideoPlayer({ videoState, onPorgresBarClick, onDurationDiff }: Prop) {
 
 	useEffect(() => {
 		if (!videoPlayer.current) return;
-		if (videoPlayer.current.duration != videoState.duration && !isNaN(videoPlayer.current.duration)) {
-			//console.log(videoPlayer.current.duration, videoState.duration);
-			onDurationDiff();
-			videoPlayer.current.currentTime = 0;
-			videoPlayer.current.pause();
-			return;
-		}
+		console.log(videoState);
+
+		videoPlayer.current.src = videoState.src;
+		videoPlayer.current.load();
+
 		videoPlayer.current.currentTime = videoState.currentTime;
 		videoState.paused ? videoPlayer.current?.pause() : videoPlayer.current?.play();
 	});
@@ -44,7 +42,16 @@ function VideoPlayer({ videoState, onPorgresBarClick, onDurationDiff }: Prop) {
 		const x = e.clientX - rect.left;
 		const percent = x / rect.width;
 		videoPlayer.current.currentTime = percent * videoPlayer.current.duration;
-		onPorgresBarClick(videoPlayer.current.paused, videoPlayer.current.currentTime, videoPlayer.current.duration);
+		ws.current
+			? sendPayload(
+					MsgType.SYNC,
+					null,
+					videoPlayer.current.paused,
+					videoPlayer.current.currentTime,
+					videoPlayer.current.duration,
+					ws.current
+			  )
+			: console.log("No socket");
 	};
 
 	return (

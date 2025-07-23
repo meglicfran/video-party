@@ -1,31 +1,18 @@
 import LeaveRoomControl from "./LeaveRoomControl";
 import VideoControl from "./VideoControl";
 import VideoPlayer from "./VideoPlayer";
-
 import type { VideoState } from "../App";
-
 import { VideoContext } from "./VideoContext";
 import { useRef } from "react";
+import VideoSelect from "./VideoSelect";
 
 interface Prop {
 	roomNumber: number;
-	onLeaveRoom: (room: number) => void;
 	videoState: VideoState;
-	onPorgresBarClick: (paused: boolean, currentTime: number, duration: number) => void;
-	onDurationDiff: () => void;
-	onPlayClicked: (currentTIme: number) => void;
-	onStopClicked: (currentTIme: number) => void;
+	onInputChange: (url: string, duration: number) => void;
 }
 
-function MainScreen({
-	roomNumber,
-	onLeaveRoom,
-	videoState,
-	onPorgresBarClick,
-	onDurationDiff,
-	onPlayClicked,
-	onStopClicked,
-}: Prop) {
+function MainScreen({ roomNumber, videoState, onInputChange }: Prop) {
 	const currentTime = useRef(videoState.currentTime);
 
 	const updateCurrentTime = (time: number) => {
@@ -34,22 +21,12 @@ function MainScreen({
 
 	return (
 		<div className={roomNumber == -1 ? "hidden" : ""} id="app-container">
-			<LeaveRoomControl roomNumber={roomNumber} onLeaveRoom={onLeaveRoom} />
+			<LeaveRoomControl roomNumber={roomNumber} />
 			<VideoContext.Provider value={{ currentTime, updateCurrentTime }}>
-				<VideoPlayer
-					videoState={videoState}
-					onPorgresBarClick={onPorgresBarClick}
-					onDurationDiff={onDurationDiff}
-				/>
-				<VideoControl onPlayClicked={onPlayClicked} onStopClicked={onStopClicked} />
+				<VideoPlayer videoState={videoState} />
+				<VideoControl />
 			</VideoContext.Provider>
-			<div className="select-container">
-				<label>Select video</label>
-				<input className="button" type="file" accept="video/*" id="fileInput" />
-				<button className="button" id="submit">
-					Select
-				</button>
-			</div>
+			<VideoSelect onInputChange={onInputChange} />
 		</div>
 	);
 }

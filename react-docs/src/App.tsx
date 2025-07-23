@@ -2,6 +2,7 @@ import Toast from "./components/Toast";
 import JoinRoom from "./components/JoinRoom";
 import MainScreen from "./components/MainScrenn";
 import { useEffect, useState, useRef } from "react";
+import { WebSocketContext } from "./components/WebSocketContext";
 
 /*
 Websocket message:
@@ -28,11 +29,13 @@ export interface VideoState {
 	src: string;
 }
 
-const LEAVE = 4;
-const JOIN = 3;
-const ERROR = 2;
-const SYNC = 1;
-const CONTROL = 0;
+export const enum MsgType {
+	CONTROL,
+	SYNC,
+	ERROR,
+	JOIN,
+	LEAVE,
+}
 
 function App() {
 	const [videoState, updateVideoState] = useState<VideoState>({
@@ -41,6 +44,11 @@ function App() {
 		duration: 5.059,
 		src: "/flower.webm",
 	});
+
+	const videoStateRef = useRef(videoState);
+	useEffect(() => {
+		videoStateRef.current = videoState;
+	}, [videoState]);
 
 	const [currentRoom, updateCurrentRoom] = useState<number>(-1);
 
@@ -56,7 +64,7 @@ function App() {
 			var payloadObj: Payload = JSON.parse(event.data);
 			console.log("Message from server:", payloadObj);
 
-			if (payloadObj.type == ERROR) {
+			if (payloadObj.type == MsgType.ERROR) {
 				if (payloadObj.message === "Play method not allowed") {
 					//videoPlayer.pause();
 					//showToast("One of the users' play method is not allowed!");
@@ -65,17 +73,12 @@ function App() {
 					//videoPlayer.pause();
 					//showToast("Video durations differ");
 				}
-			} else if (payloadObj.type == JOIN) {
+			} else if (payloadObj.type == MsgType.JOIN) {
 				updateCurrentRoom(Number(payloadObj.message));
-			} else if (payloadObj.type == LEAVE) {
+			} else if (payloadObj.type == MsgType.LEAVE) {
 				updateCurrentRoom(-1);
-			} else if (payloadObj.type == SYNC) {
-				updateVideoState({
-					paused: payloadObj.paused,
-					currentTime: payloadObj.currentTime,
-					duration: payloadObj.duration,
-					src: videoState.src,
-				});
+			} else if (payloadObj.type == MsgType.SYNC) {
+				handleSync(payloadObj);
 			}
 
 			return () => {
@@ -84,59 +87,31 @@ function App() {
 		};
 	}, []);
 
-	const joinHandler = (room: Number) => {
-		console.log("App: JoinRoom component trying to join room :" + room);
-		ws.current ? sendPayload(JOIN, String(room), null, null, null, ws.current) : console.log("No socket");
+	const handleSync = (payloadObj: Payload) => {
+		updateVideoState({
+			paused: payloadObj.paused,
+			currentTime: payloadObj.currentTime,
+			duration: payloadObj.duration,
+			src: videoStateRef.current.src,
+		});
 	};
 
-	const leaveRoomHandler = (room: Number) => {
-		console.log("App: LeaveRoomControl trying to leave room " + room);
-		ws.current ? sendPayload(LEAVE, String(room), null, null, null, ws.current) : console.log("No socket");
-	};
-
-	const progressBarClickHandler = (paused: boolean, currentTime: number, duration: number) => {
-		console.log("App: progress bar clicked");
-		ws.current ? sendPayload(SYNC, null, paused, currentTime, duration, ws.current) : console.log("No socket");
-	};
-
-	const durationDiffHandler = () => {
-		ws.current
-			? sendPayload(ERROR, "Video durations differ", null, null, null, ws.current)
-			: console.log("No socket");
-	};
-
-	const playClickHandler = (currentTIme: number) => {
-		if (!videoState.paused) return;
-		ws.current
-			? sendPayload(SYNC, null, false, currentTIme, videoState.duration, ws.current)
-			: console.log("No socket");
-	};
-
-	const stopClickHandler = (currentTIme: number) => {
-		if (videoState.paused) return;
-		ws.current
-			? sendPayload(SYNC, null, true, currentTIme, videoState.duration, ws.current)
-			: console.log("No socket");
+	const inputChangeHandler = (file: string, duration: number) => {
+		updateVideoState({ paused: true, currentTime: 0, duration: duration, src: file });
 	};
 
 	return (
 		<>
-			<Toast />
-			<JoinRoom roomNumber={currentRoom} onJoin={joinHandler} />
-			<MainScreen
-				roomNumber={currentRoom}
-				videoState={videoState}
-				onLeaveRoom={leaveRoomHandler}
-				onPorgresBarClick={progressBarClickHandler}
-				onDurationDiff={durationDiffHandler}
-				onPlayClicked={playClickHandler}
-				onStopClicked={stopClickHandler}
-			/>
+			<WebSocketContext value={ws}>
+				<Toast />
+				<JoinRoom roomNumber={currentRoom} />
+				<MainScreen roomNumber={currentRoom} videoState={videoState} onInputChange={inputChangeHandler} />
+			</WebSocketContext>
 		</>
 	);
 }
 
-function sendPayload(
+export function sendPayload(
 	typeArg: Number | null,
 	messageArg: string | null,
 	pausedArg: boolean | null,

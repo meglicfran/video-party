@@ -1,0 +1,49 @@
+import { useRef } from "react";
+
+interface Prop {
+	onInputChange: (url: string, duration: number) => void;
+}
+
+function VideoSelect({ onInputChange }: Prop) {
+	const fileInput = useRef<HTMLInputElement>(null);
+
+	const submitClickHandler = () => {
+		fileInput.current?.click();
+	};
+
+	const handleInputChange = () => {
+		if (!fileInput.current) return;
+
+		if (!fileInput.current.files || fileInput.current.files.length === 0) return;
+
+		const file = fileInput.current.files[0];
+		var fileURL = window.URL.createObjectURL(file);
+
+		const video = document.createElement("video");
+		video.preload = "metadata";
+		video.src = fileURL;
+
+		video.onloadedmetadata = () => {
+			onInputChange(fileURL, video.duration);
+		};
+	};
+
+	return (
+		<div className="select-container">
+			<label>Select video</label>
+			<input
+				className="button"
+				type="file"
+				accept="video/*"
+				id="fileInput"
+				ref={fileInput}
+				onChange={handleInputChange}
+			/>
+			<button className="button" id="submit" onClick={submitClickHandler}>
+				Select
+			</button>
+		</div>
+	);
+}
+
+export default VideoSelect;

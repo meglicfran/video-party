@@ -1,22 +1,25 @@
 import { useState } from "react";
+import { useWebSocketContext } from "./WebSocketContext";
+import { MsgType, sendPayload } from "../App";
 
 interface Prop {
 	roomNumber: Number;
-	onJoin: (roomNumber: Number) => void;
 }
 
-function JoinRoom({ roomNumber, onJoin }: Prop) {
+function JoinRoom({ roomNumber }: Prop) {
+	const ws = useWebSocketContext();
 	const [inputValue, setInputValue] = useState("");
 
-	const clickHandler = (event: React.MouseEvent) => {
-		console.log("Trying to join room: " + inputValue);
-		//sendState(JOIN, roomNumberInput.valueAsNumber, null, null, null);
+	const clickHandler = () => {
 		const inputValueNum = Number(inputValue);
 		if (isNaN(inputValueNum)) {
 			console.error("JoinRoom component: Invalid number!");
 			return;
 		}
-		onJoin(inputValueNum);
+
+		ws.current
+			? sendPayload(MsgType.JOIN, String(inputValueNum), null, null, null, ws.current)
+			: console.log("No socket");
 	};
 
 	return (

@@ -1,25 +1,24 @@
+import { MsgType, sendPayload } from "../App";
+import { useWebSocketContext } from "./WebSocketContext";
+
 interface Prop {
 	roomNumber: number;
-	onLeaveRoom: (room: number) => void;
 }
 
-function LeaveRoomControl({ roomNumber, onLeaveRoom }: Prop) {
+function LeaveRoomControl({ roomNumber }: Prop) {
+	const ws = useWebSocketContext();
+
 	const leaveRoomClickHandler = () => {
-		console.log(
-			"LeaveRoomControl component: trying to leave room " + roomNumber
-		);
-		onLeaveRoom(roomNumber);
+		ws.current
+			? sendPayload(MsgType.LEAVE, String(roomNumber), null, null, null, ws.current)
+			: console.log("No socket");
 	};
 
 	return (
 		<div className="room-container">
 			<h2>Room:</h2>
 			<h2 id="room-number">{String(roomNumber)}</h2>
-			<button
-				className="button"
-				id="leave"
-				onClick={leaveRoomClickHandler}
-			>
+			<button className="button" id="leave" onClick={leaveRoomClickHandler}>
 				Leave room
 			</button>
 		</div>
