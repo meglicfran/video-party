@@ -1,7 +1,7 @@
-import Toast from "./components/Toast/Toast";
-import JoinRoom from "./components/JoinRoom/JoinRoom";
-import MainScreen from "./components/MainScreen/MainScrenn";
-import { useEffect, useState, useRef, createContext } from "react";
+import Toast from "./components/Toast";
+import JoinRoom from "./components/JoinRoom";
+import MainScreen from "./components/MainScrenn";
+import { useEffect, useState, useRef } from "react";
 
 /*
 Websocket message:
@@ -21,7 +21,7 @@ interface Payload {
 	duration: number;
 }
 
-interface VideoState {
+export interface VideoState {
 	paused: boolean;
 	currentTime: number;
 	duration: number;
@@ -56,12 +56,19 @@ function App() {
 			var payloadObj: Payload = JSON.parse(event.data);
 			console.log("Message from server:", payloadObj);
 
-			if (payloadObj.type == JOIN) {
+			if (payloadObj.type == ERROR) {
+				if (payloadObj.message === "Play method not allowed") {
+					//videoPlayer.pause();
+					//showToast("One of the users' play method is not allowed!");
+				} else if (payloadObj.message === "Video durations differ") {
+					//videoPlayer.currentTime = 0;
+					//videoPlayer.pause();
+					//showToast("Video durations differ");
+				}
+			} else if (payloadObj.type == JOIN) {
 				updateCurrentRoom(Number(payloadObj.message));
-				return;
 			} else if (payloadObj.type == LEAVE) {
 				updateCurrentRoom(-1);
-				return;
 			} else if (payloadObj.type == SYNC) {
 				updateVideoState({
 					paused: payloadObj.paused,
@@ -69,7 +76,6 @@ function App() {
 					duration: payloadObj.duration,
 					src: videoState.src,
 				});
-				return;
 			}
 
 			return () => {
@@ -80,39 +86,36 @@ function App() {
 
 	const joinHandler = (room: Number) => {
 		console.log("App: JoinRoom component trying to join room :" + room);
-		ws.current
-			? sendPayload(JOIN, String(room), null, null, null, ws.current)
-			: console.log("No socket");
+		ws.current ? sendPayload(JOIN, String(room), null, null, null, ws.current) : console.log("No socket");
 	};
 
 	const leaveRoomHandler = (room: Number) => {
 		console.log("App: LeaveRoomControl trying to leave room " + room);
-		ws.current
-			? sendPayload(LEAVE, String(room), null, null, null, ws.current)
-			: console.log("No socket");
+		ws.current ? sendPayload(LEAVE, String(room), null, null, null, ws.current) : console.log("No socket");
 	};
 
-	const progressBarClickHandler = (
-		paused: boolean,
-		currentTime: number,
-		duration: number
-	) => {
+	const progressBarClickHandler = (paused: boolean, currentTime: number, duration: number) => {
 		console.log("App: progress bar clicked");
-		ws.current
-			? sendPayload(SYNC, null, paused, currentTime, duration, ws.current)
-			: console.log("No socket");
+		ws.current ? sendPayload(SYNC, null, paused, currentTime, duration, ws.current) : console.log("No socket");
 	};
 
 	const durationDiffHandler = () => {
 		ws.current
-			? sendPayload(
-					ERROR,
-					"Video durations differ",
-					null,
-					null,
-					null,
-					ws.current
-			  )
+			? sendPayload(ERROR, "Video durations differ", null, null, null, ws.current)
+			: console.log("No socket");
+	};
+
+	const playClickHandler = (currentTIme: number) => {
+		if (!videoState.paused) return;
+		ws.current
+			? sendPayload(SYNC, null, false, currentTIme, videoState.duration, ws.current)
+			: console.log("No socket");
+	};
+
+	const stopClickHandler = (currentTIme: number) => {
+		if (videoState.paused) return;
+		ws.current
+			? sendPayload(SYNC, null, true, currentTIme, videoState.duration, ws.current)
 			: console.log("No socket");
 	};
 
@@ -126,6 +129,8 @@ function App() {
 				onLeaveRoom={leaveRoomHandler}
 				onPorgresBarClick={progressBarClickHandler}
 				onDurationDiff={durationDiffHandler}
+				onPlayClicked={playClickHandler}
+				onStopClicked={stopClickHandler}
 			/>
 		</>
 	);
