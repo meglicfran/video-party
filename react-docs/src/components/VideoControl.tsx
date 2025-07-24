@@ -5,15 +5,18 @@ import { useWebSocketContext } from "./WebSocketContext";
 function VideoControl() {
 	const ws = useWebSocketContext();
 	const timeRef = useVideoContext().currentTime;
+	const durationRef = useVideoContext().durationRef;
 
 	const playClickHandler = () => {
 		const time = timeRef.current;
-		ws.current ? sendPayload(MsgType.SYNC, null, false, time, null, ws.current) : console.log("No socket");
+		const duration = durationRef.current;
+		ws.current ? sendPayload(MsgType.SYNC, null, false, time, duration, ws.current) : console.log("No socket");
 	};
 
 	const stopClickHandler = () => {
 		const time = timeRef.current;
-		ws.current ? sendPayload(MsgType.SYNC, null, true, time, null, ws.current) : console.log("No socket");
+		const duration = durationRef.current;
+		ws.current ? sendPayload(MsgType.SYNC, null, true, time, duration, ws.current) : console.log("No socket");
 	};
 
 	return (

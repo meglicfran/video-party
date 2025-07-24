@@ -14,12 +14,32 @@ function VideoPlayer({ videoState, videoSrc }: Prop) {
 	const progressBar = useRef<HTMLDivElement>(null);
 	const progressContainer = useRef<HTMLDivElement>(null);
 	const updateCurrentTime = useVideoContext().updateCurrentTime;
+	const updateDuration = useVideoContext().updateDuration;
 
 	useEffect(() => {
 		if (!videoPlayer.current) return;
 
+		if (
+			videoPlayer.current.duration &&
+			videoState.duration &&
+			videoPlayer.current.duration !== videoState.duration
+		) {
+			videoPlayer.current.currentTime = 0;
+			videoPlayer.current.pause();
+			ws.current
+				? sendPayload(
+						MsgType.ERROR,
+						"Video durations differ",
+						true,
+						0,
+						videoPlayer.current.duration,
+						ws.current
+				  )
+				: console.log("No socket");
+		}
+
 		videoPlayer.current.currentTime = videoState.currentTime;
-		videoState.paused ? videoPlayer.current?.pause() : videoPlayer.current?.play();
+		videoState.paused ? videoPlayer.current.pause() : videoPlayer.current.play();
 	}, [videoState]);
 
 	useEffect(() => {
@@ -27,6 +47,11 @@ function VideoPlayer({ videoState, videoSrc }: Prop) {
 
 		videoPlayer.current.src = videoSrc;
 		videoPlayer.current.load();
+
+		videoPlayer.current.onloadedmetadata = () => {
+			if (!videoPlayer.current) return;
+			updateDuration(videoPlayer.current.duration);
+		};
 	}, [videoSrc]);
 
 	const timeUpdateHandler = () => {

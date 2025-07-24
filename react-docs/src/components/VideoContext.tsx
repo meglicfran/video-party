@@ -2,7 +2,9 @@ import { createContext, useContext } from "react";
 
 export type VideoContextType = {
 	currentTime: React.RefObject<number>;
+	durationRef: React.RefObject<number>;
 	updateCurrentTime: (time: number) => void;
+	updateDuration: (duration: number) => void;
 };
 
 export const VideoContext = createContext<VideoContextType | undefined>(undefined);

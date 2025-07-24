@@ -1,4 +1,4 @@
-import Toast from "./components/Toast";
+import Toast, { showToast } from "./components/Toast";
 import JoinRoom from "./components/JoinRoom";
 import MainScreen from "./components/MainScrenn";
 import { useEffect, useState, useRef } from "react";
@@ -56,6 +56,7 @@ function App() {
 		ws.current = new WebSocket("ws://localhost:3000");
 		ws.current.onopen = () => {
 			console.log("Connected to server");
+			showToast("Connected to server");
 		};
 
 		ws.current.onmessage = (event) => {
@@ -63,14 +64,7 @@ function App() {
 			console.log("Message from server:", payloadObj);
 
 			if (payloadObj.type == MsgType.ERROR) {
-				if (payloadObj.message === "Play method not allowed") {
-					//videoPlayer.pause();
-					//showToast("One of the users' play method is not allowed!");
-				} else if (payloadObj.message === "Video durations differ") {
-					//videoPlayer.currentTime = 0;
-					//videoPlayer.pause();
-					//showToast("Video durations differ");
-				}
+				showToast(payloadObj.message);
 			} else if (payloadObj.type == MsgType.JOIN) {
 				updateCurrentRoom(Number(payloadObj.message));
 			} else if (payloadObj.type == MsgType.LEAVE) {
