@@ -1,10 +1,10 @@
 import { useRef } from "react";
 
 interface Prop {
-	onInputChange: (url: string, duration: number) => void;
+	onSrcChange: (url: string) => void;
 }
 
-function VideoSelect({ onInputChange }: Prop) {
+function VideoSelect({ onSrcChange }: Prop) {
 	const fileInput = useRef<HTMLInputElement>(null);
 
 	const submitClickHandler = () => {
@@ -19,13 +19,7 @@ function VideoSelect({ onInputChange }: Prop) {
 		const file = fileInput.current.files[0];
 		var fileURL = window.URL.createObjectURL(file);
 
-		const video = document.createElement("video");
-		video.preload = "metadata";
-		video.src = fileURL;
-
-		video.onloadedmetadata = () => {
-			onInputChange(fileURL, video.duration);
-		};
+		onSrcChange(fileURL);
 	};
 
 	return (

@@ -26,7 +26,6 @@ export interface VideoState {
 	paused: boolean;
 	currentTime: number;
 	duration: number;
-	src: string;
 }
 
 export const enum MsgType {
@@ -42,7 +41,6 @@ function App() {
 		paused: true,
 		currentTime: 0,
 		duration: 5.059,
-		src: "/flower.webm",
 	});
 
 	const videoStateRef = useRef(videoState);
@@ -92,20 +90,14 @@ function App() {
 			paused: payloadObj.paused,
 			currentTime: payloadObj.currentTime,
 			duration: payloadObj.duration,
-			src: videoStateRef.current.src,
 		});
 	};
-
-	const inputChangeHandler = (file: string, duration: number) => {
-		updateVideoState({ paused: true, currentTime: 0, duration: duration, src: file });
-	};
-
 	return (
 		<>
 			<WebSocketContext value={ws}>
 				<Toast />
 				<JoinRoom roomNumber={currentRoom} />
-				<MainScreen roomNumber={currentRoom} videoState={videoState} onInputChange={inputChangeHandler} />
+				<MainScreen roomNumber={currentRoom} videoState={videoState} />
 			</WebSocketContext>
 		</>
 	);

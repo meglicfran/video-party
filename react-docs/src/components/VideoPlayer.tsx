@@ -5,9 +5,10 @@ import { useWebSocketContext } from "./WebSocketContext";
 
 interface Prop {
 	videoState: VideoState;
+	videoSrc: string;
 }
 
-function VideoPlayer({ videoState }: Prop) {
+function VideoPlayer({ videoState, videoSrc }: Prop) {
 	const ws = useWebSocketContext();
 	const videoPlayer = useRef<HTMLVideoElement>(null);
 	const progressBar = useRef<HTMLDivElement>(null);
@@ -16,14 +17,17 @@ function VideoPlayer({ videoState }: Prop) {
 
 	useEffect(() => {
 		if (!videoPlayer.current) return;
-		console.log(videoState);
-
-		videoPlayer.current.src = videoState.src;
-		videoPlayer.current.load();
 
 		videoPlayer.current.currentTime = videoState.currentTime;
 		videoState.paused ? videoPlayer.current?.pause() : videoPlayer.current?.play();
-	});
+	}, [videoState]);
+
+	useEffect(() => {
+		if (!videoPlayer.current) return;
+
+		videoPlayer.current.src = videoSrc;
+		videoPlayer.current.load();
+	}, [videoSrc]);
 
 	const timeUpdateHandler = () => {
 		if (videoPlayer.current && progressBar.current) {
@@ -58,7 +62,7 @@ function VideoPlayer({ videoState }: Prop) {
 		<>
 			<div className="player-container">
 				<video id="player" ref={videoPlayer} onTimeUpdate={timeUpdateHandler}>
-					<source src={videoState.src} type="video/webm" />
+					<source src={videoSrc} type="video/webm" />
 					<p>Error loading video</p>
 				</video>
 			</div>
