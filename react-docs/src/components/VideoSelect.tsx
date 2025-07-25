@@ -23,8 +23,7 @@ function VideoSelect({ onSrcChange }: Prop) {
 	};
 
 	return (
-		<div className="select-container">
-			<label>Select video</label>
+		<>
 			<input
 				className="button"
 				type="file"
@@ -33,10 +32,10 @@ function VideoSelect({ onSrcChange }: Prop) {
 				ref={fileInput}
 				onChange={handleInputChange}
 			/>
-			<button className="button" id="submit" onClick={submitClickHandler}>
-				Select
+			<button className="button-primary" id="submit" onClick={submitClickHandler}>
+				Select video
 			</button>
-		</div>
+		</>
 	);
 }
 

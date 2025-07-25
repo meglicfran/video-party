@@ -1,5 +1,5 @@
 import { useEffect, useRef, type MouseEvent } from "react";
-import { MsgType, sendPayload, type VideoState } from "../App";
+import { MsgType, sendPayload } from "../App";
 import { useWebSocketContext } from "./WebSocketContext";
 import { useVideoContext } from "./VideoContext";
 
@@ -77,18 +77,13 @@ function VideoPlayer({ videoSrc }: Prop) {
 			: console.log("No socket");
 	};
 
-	const playClickHandler = () => {
+	const stopPlayClickHandler = () => {
 		if (!videoPlayer.current) return;
 		const time = videoPlayer.current.currentTime;
 		const duration = videoPlayer.current.duration;
-		ws.current ? sendPayload(MsgType.SYNC, null, false, time, duration, ws.current) : console.log("No socket");
-	};
-
-	const stopClickHandler = () => {
-		if (!videoPlayer.current) return;
-		const time = videoPlayer.current.currentTime;
-		const duration = videoPlayer.current.duration;
-		ws.current ? sendPayload(MsgType.SYNC, null, true, time, duration, ws.current) : console.log("No socket");
+		ws.current
+			? sendPayload(MsgType.SYNC, null, !videoPlayer.current.paused, time, duration, ws.current)
+			: console.log("No socket");
 	};
 
 	return (
@@ -98,17 +93,17 @@ function VideoPlayer({ videoSrc }: Prop) {
 					<source src={videoSrc} type="video/webm" />
 					<p>Error loading video</p>
 				</video>
-			</div>
-			<div className="progress-container" onClick={handleProgressBarClick} ref={progressContainer}>
-				<div className="progress-bar" id="progress-bar" ref={progressBar}></div>
-			</div>
-			<div className="button-container">
-				<button className="button" id="play" onClick={playClickHandler}>
-					Play
-				</button>
-				<button className="button" id="stop" onClick={stopClickHandler}>
-					Stop
-				</button>
+				<div className="control-container">
+					<button className="play-pause" id="play" onClick={stopPlayClickHandler}>
+						<i className={videoState.paused ? "fa-solid fa-play" : "hidden"}></i>
+						<i className={videoState.paused ? "hidden" : "fa-solid fa-pause"}></i>
+					</button>
+					<div className="progress-hitbox" onClick={handleProgressBarClick}>
+						<div className="progress-container" ref={progressContainer}>
+							<div className="progress-bar" id="progress-bar" ref={progressBar}></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</>
 	);

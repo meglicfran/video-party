@@ -1,7 +1,6 @@
 import LeaveRoomControl from "./LeaveRoomControl";
 import VideoPlayer from "./VideoPlayer";
-import type { VideoState } from "../App";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import VideoSelect from "./VideoSelect";
 
 interface Prop {
@@ -16,10 +15,12 @@ function MainScreen({ roomNumber }: Prop) {
 	};
 
 	return (
-		<div className={roomNumber == -1 ? "hidden" : ""} id="app-container">
+		<div className={roomNumber == -1 ? "hidden" : "app-container"} id="app-container">
 			<VideoPlayer videoSrc={videoSrc} />
-			<LeaveRoomControl roomNumber={roomNumber} />
-			<VideoSelect onSrcChange={handleSrcChange} />
+			<div className="room-src-container">
+				<LeaveRoomControl roomNumber={roomNumber} />
+				<VideoSelect onSrcChange={handleSrcChange} />
+			</div>
 		</div>
 	);
 }

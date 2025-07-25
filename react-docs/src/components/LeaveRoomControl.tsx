@@ -15,13 +15,9 @@ function LeaveRoomControl({ roomNumber }: Prop) {
 	};
 
 	return (
-		<div className="room-container">
-			<h2>Room:</h2>
-			<h2 id="room-number">{String(roomNumber)}</h2>
-			<button className="button-primary" id="leave" onClick={leaveRoomClickHandler}>
-				Leave room
-			</button>
-		</div>
+		<button className="button-secondary" id="leave" onClick={leaveRoomClickHandler}>
+			Leave room
+		</button>
 	);
 }
 

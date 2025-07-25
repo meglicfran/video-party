@@ -31,6 +31,13 @@ body {
 	align-items: center;
 }
 
+.app-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
 .button-primary {
 	margin-left: 15px;
 	background-color: #2f27ce;
@@ -47,6 +54,22 @@ body {
 	box-shadow: 0px 9px 14px 0px rgba(47, 39, 206, 0.17);
 }
 
+.button-secondary {
+	margin-left: 15px;
+	background-color: #dddbff;
+	color: #050316;
+	font-size: 15pt;
+	font-weight: bold;
+	padding: 11px 40px 11px 40px;
+	border: none;
+	border-radius: 11px;
+}
+
+.button-secondary:hover {
+	cursor: pointer;
+	box-shadow: 0px 5px 10px 0px rgba(5, 3, 22, 0.17);
+}
+
 .number-input {
 	font-size: 20pt;
 	color: #050316;
@@ -56,14 +79,67 @@ body {
 }
 
 .player-container {
+	position: relative;
 	margin-top: 50px;
 	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 #player {
+	max-width: 1280px;
+}
+
+.control-container {
+	position: absolute;
+	transform: translateY(400%);
+	border-radius: 15px;
+	padding: 10px;
+	padding-right: 25px;
+	background-color: #050316;
+	opacity: 66%;
+	display: flex;
+	flex-direction: row;
+	width: 90%;
+	align-items: center;
+	justify-content: center;
+	align-items: center;
+}
+
+.play-pause {
+	font-size: 15pt;
+	background-color: transparent;
+	border: none;
+	margin: 5px;
+	color: #fbfbfe;
+}
+
+.progress-hitbox {
+	width: 100%;
+	height: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.progress-hitbox:hover {
 	cursor: pointer;
+}
+
+.progress-container {
+	width: 100%;
+	height: 2px;
+	background: #a1a1a1;
+	cursor: pointer;
+	margin-top: 5px;
+}
+
+.progress-bar {
+	transform: translateY(-25%);
+	width: 0%;
+	height: 200%;
+	background: #fbfbfe;
 }
 
 .status-container {
@@ -103,20 +179,6 @@ body {
 	font-size: 1.5rem;
 }
 
-.progress-container {
-	width: 100%;
-	height: 10px;
-	background: #ddd;
-	cursor: pointer;
-	margin-top: 5px;
-}
-
-.progress-bar {
-	width: 0%;
-	height: 100%;
-	background: #2196f3;
-}
-
 #toast {
 	position: fixed;
 	bottom: 20px;
@@ -152,10 +214,10 @@ body {
 	display: none;
 }
 
-.room-container {
+.room-src-container {
 	display: flex;
 	justify-content: center;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: center;
 	margin: 45px;
 }
