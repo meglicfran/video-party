@@ -1,21 +1,20 @@
 import { useEffect, useRef, type MouseEvent } from "react";
 import { MsgType, sendPayload, type VideoState } from "../App";
-import { useVideoContext } from "./VideoContext";
 import { useWebSocketContext } from "./WebSocketContext";
+import { useVideoContext } from "./VideoContext";
 
 interface Prop {
-	videoState: VideoState;
 	videoSrc: string;
 }
 
-function VideoPlayer({ videoState, videoSrc }: Prop) {
+function VideoPlayer({ videoSrc }: Prop) {
 	const ws = useWebSocketContext();
+	const videoState = useVideoContext().videoState.current;
 	const videoPlayer = useRef<HTMLVideoElement>(null);
 	const progressBar = useRef<HTMLDivElement>(null);
 	const progressContainer = useRef<HTMLDivElement>(null);
-	const updateCurrentTime = useVideoContext().updateCurrentTime;
-	const updateDuration = useVideoContext().updateDuration;
 
+	/* Video state change */
 	useEffect(() => {
 		if (!videoPlayer.current) return;
 
@@ -42,23 +41,18 @@ function VideoPlayer({ videoState, videoSrc }: Prop) {
 		videoState.paused ? videoPlayer.current.pause() : videoPlayer.current.play();
 	}, [videoState]);
 
+	/*Video source change*/
 	useEffect(() => {
 		if (!videoPlayer.current) return;
 
 		videoPlayer.current.src = videoSrc;
 		videoPlayer.current.load();
-
-		videoPlayer.current.onloadedmetadata = () => {
-			if (!videoPlayer.current) return;
-			updateDuration(videoPlayer.current.duration);
-		};
 	}, [videoSrc]);
 
 	const timeUpdateHandler = () => {
 		if (videoPlayer.current && progressBar.current) {
 			const percent = (videoPlayer.current.currentTime / videoPlayer.current.duration) * 100;
 			progressBar.current.style.width = String(percent) + "%";
-			updateCurrentTime(videoPlayer.current.currentTime);
 		}
 	};
 
@@ -83,6 +77,20 @@ function VideoPlayer({ videoState, videoSrc }: Prop) {
 			: console.log("No socket");
 	};
 
+	const playClickHandler = () => {
+		if (!videoPlayer.current) return;
+		const time = videoPlayer.current.currentTime;
+		const duration = videoPlayer.current.duration;
+		ws.current ? sendPayload(MsgType.SYNC, null, false, time, duration, ws.current) : console.log("No socket");
+	};
+
+	const stopClickHandler = () => {
+		if (!videoPlayer.current) return;
+		const time = videoPlayer.current.currentTime;
+		const duration = videoPlayer.current.duration;
+		ws.current ? sendPayload(MsgType.SYNC, null, true, time, duration, ws.current) : console.log("No socket");
+	};
+
 	return (
 		<>
 			<div className="player-container">
@@ -93,6 +101,14 @@ function VideoPlayer({ videoState, videoSrc }: Prop) {
 			</div>
 			<div className="progress-container" onClick={handleProgressBarClick} ref={progressContainer}>
 				<div className="progress-bar" id="progress-bar" ref={progressBar}></div>
+			</div>
+			<div className="button-container">
+				<button className="button" id="play" onClick={playClickHandler}>
+					Play
+				</button>
+				<button className="button" id="stop" onClick={stopClickHandler}>
+					Stop
+				</button>
 			</div>
 		</>
 	);

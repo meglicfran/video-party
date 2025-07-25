@@ -1,20 +1,18 @@
 import { createContext, useContext } from "react";
+import type { VideoState } from "../App";
 
 export type VideoContextType = {
-	currentTime: React.RefObject<number>;
-	durationRef: React.RefObject<number>;
-	updateCurrentTime: (time: number) => void;
-	updateDuration: (duration: number) => void;
+	videoState: React.RefObject<VideoState>;
+	updateVideoStateContext: (newState: VideoState) => void;
 };
 
 export const VideoContext = createContext<VideoContextType | undefined>(undefined);
 
 export function useVideoContext() {
-	const videContext = useContext(VideoContext);
-
-	if (videContext === undefined) {
+	const context = useContext(VideoContext);
+	if (context === undefined) {
 		throw new Error("useVideoContext must be used within a VideoContext");
 	}
 
-	return videContext;
+	return context;
 }

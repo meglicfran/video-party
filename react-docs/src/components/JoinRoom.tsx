@@ -28,12 +28,13 @@ function JoinRoom({ roomNumber }: Prop) {
 				<input
 					type="number"
 					id="room-number-input"
+					className="number-input"
 					value={inputValue}
 					onChange={(e) => {
 						setInputValue(e.target.value);
 					}}
 				/>
-				<button className="button" id="join" onClick={clickHandler}>
+				<button className="button-primary" id="join" onClick={clickHandler}>
 					Join room
 				</button>
 			</div>

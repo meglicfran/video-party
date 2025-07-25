@@ -3,6 +3,8 @@ import JoinRoom from "./components/JoinRoom";
 import MainScreen from "./components/MainScrenn";
 import { useEffect, useState, useRef } from "react";
 import { WebSocketContext } from "./components/WebSocketContext";
+import Title from "./components/Title";
+import { VideoContext } from "./components/VideoContext";
 
 /*
 Websocket message:
@@ -37,18 +39,19 @@ export const enum MsgType {
 }
 
 function App() {
-	const [videoState, updateVideoState] = useState<VideoState>({
+	const [, updateVideoState] = useState<VideoState>({
 		paused: true,
 		currentTime: 0,
 		duration: 5.059,
 	});
 
-	const videoStateRef = useRef(videoState);
-	useEffect(() => {
-		videoStateRef.current = videoState;
-	}, [videoState]);
-
 	const [currentRoom, updateCurrentRoom] = useState<number>(-1);
+
+	const videoStateRef = useRef<VideoState>({ paused: true, currentTime: 0, duration: 5.059 });
+
+	const updateVideoStateContext = (newState: VideoState) => {
+		videoStateRef.current = newState;
+	};
 
 	const ws = useRef<WebSocket | null>(null);
 
@@ -85,13 +88,21 @@ function App() {
 			currentTime: payloadObj.currentTime,
 			duration: payloadObj.duration,
 		});
+		updateVideoStateContext({
+			paused: payloadObj.paused,
+			currentTime: payloadObj.currentTime,
+			duration: payloadObj.duration,
+		});
 	};
 	return (
 		<>
 			<WebSocketContext value={ws}>
-				<Toast />
-				<JoinRoom roomNumber={currentRoom} />
-				<MainScreen roomNumber={currentRoom} videoState={videoState} />
+				<VideoContext value={{ videoState: videoStateRef, updateVideoStateContext }}>
+					<Toast />
+					<Title roomNumber={currentRoom} title={"Video Party"} />
+					<JoinRoom roomNumber={currentRoom} />
+					<MainScreen roomNumber={currentRoom} />
+				</VideoContext>
 			</WebSocketContext>
 		</>
 	);

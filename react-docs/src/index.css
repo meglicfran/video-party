@@ -6,10 +6,53 @@
 
 /* Set default font and background */
 body {
-	font-family: Arial, sans-serif;
-	background-color: #333;
-	color: #f9f9f9;
+	font-family: "Inter", sans-serif;
+	background-color: #fbfbfe;
+	color: #050316;
 	line-height: 1.6;
+}
+
+.title-container {
+	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.title {
+	font-size: 64pt;
+}
+
+.join-room {
+	margin-top: 20px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.button-primary {
+	margin-left: 15px;
+	background-color: #2f27ce;
+	color: #fbfbfe;
+	font-size: 15pt;
+	font-weight: bold;
+	padding: 11px 40px 11px 40px;
+	border: none;
+	border-radius: 11px;
+}
+
+.button-primary:hover {
+	cursor: pointer;
+	box-shadow: 0px 9px 14px 0px rgba(47, 39, 206, 0.17);
+}
+
+.number-input {
+	font-size: 20pt;
+	color: #050316;
+	padding: 7px 20px 7px 20px;
+	border: 1px solid #dddbff;
+	border-radius: 11px;
 }
 
 .player-container {
@@ -115,12 +158,4 @@ body {
 	flex-direction: column;
 	align-items: center;
 	margin: 45px;
-}
-
-.join-room {
-	margin: 45px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
 }
