@@ -89,22 +89,34 @@ body {
 
 #player {
 	max-width: 1280px;
+	border-radius: 15px;
+}
+
+#player:hover {
+	cursor: pointer;
 }
 
 .control-container {
 	position: absolute;
-	transform: translateY(400%);
+	transform: translateY(390%);
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+	opacity: 0;
 	border-radius: 15px;
 	padding: 10px;
 	padding-right: 25px;
 	background-color: #050316;
-	opacity: 66%;
 	display: flex;
 	flex-direction: row;
 	width: 90%;
 	align-items: center;
 	justify-content: center;
-	align-items: center;
+}
+
+.control-container:hover {
+	opacity: 1;
+	transform: translateY(370%);
+	visibility: visible;
+	pointer-events: auto;
 }
 
 .play-pause {
@@ -116,8 +128,8 @@ body {
 }
 
 .progress-hitbox {
-	width: 100%;
-	height: 20px;
+	flex-grow: 1;
+	height: 40px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -140,6 +152,33 @@ body {
 	width: 0%;
 	height: 200%;
 	background: #fbfbfe;
+}
+
+.time-display {
+	width: fit-content;
+	color: #fbfbfe;
+	margin-left: 15px;
+}
+
+.volume-control {
+	margin-left: 15px;
+}
+
+.volume-button {
+	height: 100%;
+	font-size: 15pt;
+	background-color: transparent;
+	border: none;
+	margin: 5px;
+	color: #fbfbfe;
+}
+
+.fa-volume {
+	height: 100%;
+}
+
+#volume-slider {
+	width: 100px;
 }
 
 .status-container {

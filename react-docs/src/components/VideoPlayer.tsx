@@ -13,6 +13,9 @@ function VideoPlayer({ videoSrc }: Prop) {
 	const videoPlayer = useRef<HTMLVideoElement>(null);
 	const progressBar = useRef<HTMLDivElement>(null);
 	const progressContainer = useRef<HTMLDivElement>(null);
+	const timeDisplay = useRef<HTMLParagraphElement>(null);
+	const volumeControl = useRef<HTMLDivElement>(null);
+	const volumeSlider = useRef<HTMLInputElement>(null);
 
 	/* Video state change */
 	useEffect(() => {
@@ -50,9 +53,14 @@ function VideoPlayer({ videoSrc }: Prop) {
 	}, [videoSrc]);
 
 	const timeUpdateHandler = () => {
-		if (videoPlayer.current && progressBar.current) {
+		if (videoPlayer.current && progressBar.current && timeDisplay.current) {
 			const percent = (videoPlayer.current.currentTime / videoPlayer.current.duration) * 100;
 			progressBar.current.style.width = String(percent) + "%";
+			const curMin = String(Math.round(videoPlayer.current.currentTime / 60));
+			const curSec = String(Math.round(videoPlayer.current.currentTime % 60)).padStart(2, "0");
+			const min = String(Math.round(videoPlayer.current.duration / 60));
+			const sec = String(Math.round(videoPlayer.current.duration % 60)).padStart(2, "0");
+			timeDisplay.current.innerHTML = `${curMin}:${curSec} / ${min}:${sec}`;
 		}
 	};
 
@@ -89,7 +97,7 @@ function VideoPlayer({ videoSrc }: Prop) {
 	return (
 		<>
 			<div className="player-container">
-				<video id="player" ref={videoPlayer} onTimeUpdate={timeUpdateHandler}>
+				<video id="player" ref={videoPlayer} onTimeUpdate={timeUpdateHandler} onClick={stopPlayClickHandler}>
 					<source src={videoSrc} type="video/webm" />
 					<p>Error loading video</p>
 				</video>
@@ -102,6 +110,29 @@ function VideoPlayer({ videoSrc }: Prop) {
 						<div className="progress-container" ref={progressContainer}>
 							<div className="progress-bar" id="progress-bar" ref={progressBar}></div>
 						</div>
+					</div>
+					<p ref={timeDisplay} className="time-display">
+						0:00
+					</p>
+					<div className="volume-control" ref={volumeControl}>
+						<button className="volume-button">
+							<i className="fa-solid fa-volume-high"></i>
+						</button>
+						<input
+							ref={volumeSlider}
+							type="range"
+							id="volume-slider"
+							min={0}
+							max={1}
+							step={0.05}
+							defaultValue={1}
+							onInput={() => {
+								if (!videoPlayer.current) return;
+
+								const value = Number(volumeSlider.current?.value || 1);
+								videoPlayer.current.volume = value;
+							}}
+						/>
 					</div>
 				</div>
 			</div>
