@@ -58,7 +58,7 @@ function App() {
 	const ws = useRef<WebSocket | null>(null);
 
 	useEffect(() => {
-		ws.current = new WebSocket("ws://localhost:3000");
+		ws.current = new WebSocket("wss://websocket-server-9tc2.onrender.com");
 		ws.current.onopen = () => {
 			console.log("Connected to server");
 			showToast("Connected to server");
