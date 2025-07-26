@@ -23,8 +23,16 @@ body {
 	font-size: 64pt;
 }
 
+.create-room {
+	margin-top: 40px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
 .join-room {
-	margin-top: 20px;
+	margin-top: 25px;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -98,7 +106,9 @@ body {
 
 .control-container {
 	position: absolute;
-	transform: translateY(390%);
+	bottom: 15px;
+	left: 50%;
+	transform: translateX(-50%);
 	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
 	opacity: 0;
 	border-radius: 15px;
@@ -112,9 +122,8 @@ body {
 	justify-content: center;
 }
 
-.control-container:hover {
+.player-container:hover .control-container {
 	opacity: 1;
-	transform: translateY(370%);
 	visibility: visible;
 	pointer-events: auto;
 }
@@ -125,6 +134,10 @@ body {
 	border: none;
 	margin: 5px;
 	color: #fbfbfe;
+}
+
+.play-pause:hover {
+	cursor: pointer;
 }
 
 .progress-hitbox {

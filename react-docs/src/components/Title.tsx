@@ -1,11 +1,11 @@
 interface Prop {
-	roomNumber: number;
+	room: string;
 	title: string;
 }
 
-function Title({ roomNumber, title }: Prop) {
+function Title({ room, title }: Prop) {
 	return (
-		<div className={roomNumber == -1 ? "title-container" : "title-container hidden"}>
+		<div className={room == "" ? "title-container" : "title-container hidden"}>
 			<h1 className="title">{title}</h1>
 		</div>
 	);

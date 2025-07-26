@@ -2,16 +2,14 @@ import { MsgType, sendPayload } from "../App";
 import { useWebSocketContext } from "./WebSocketContext";
 
 interface Prop {
-	roomNumber: number;
+	room: string;
 }
 
-function LeaveRoomControl({ roomNumber }: Prop) {
+function LeaveRoomControl({ room }: Prop) {
 	const ws = useWebSocketContext();
 
 	const leaveRoomClickHandler = () => {
-		ws.current
-			? sendPayload(MsgType.LEAVE, String(roomNumber), null, null, null, ws.current)
-			: console.log("No socket");
+		ws.current ? sendPayload(MsgType.LEAVE, room, null, null, null, ws.current) : console.log("No socket");
 	};
 
 	return (

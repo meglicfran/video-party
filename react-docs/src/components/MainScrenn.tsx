@@ -4,10 +4,10 @@ import { useState } from "react";
 import VideoSelect from "./VideoSelect";
 
 interface Prop {
-	roomNumber: number;
+	room: string;
 }
 
-function MainScreen({ roomNumber }: Prop) {
+function MainScreen({ room }: Prop) {
 	const [videoSrc, updateVideoSrc] = useState("/flower.webm");
 
 	const handleSrcChange = (fileUrl: string) => {
@@ -15,12 +15,13 @@ function MainScreen({ roomNumber }: Prop) {
 	};
 
 	return (
-		<div className={roomNumber == -1 ? "hidden" : "app-container"} id="app-container">
+		<div className={room == "" ? "hidden" : "app-container"} id="app-container">
 			<VideoPlayer videoSrc={videoSrc} />
 			<div className="room-src-container">
-				<LeaveRoomControl roomNumber={roomNumber} />
+				<LeaveRoomControl room={room} />
 				<VideoSelect onSrcChange={handleSrcChange} />
 			</div>
+			<h1>{`Room: ${room}`}</h1>
 		</div>
 	);
 }

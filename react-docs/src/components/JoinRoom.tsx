@@ -3,30 +3,24 @@ import { useWebSocketContext } from "./WebSocketContext";
 import { MsgType, sendPayload } from "../App";
 
 interface Prop {
-	roomNumber: Number;
+	room: string;
 }
 
-function JoinRoom({ roomNumber }: Prop) {
+function JoinRoom({ room }: Prop) {
 	const ws = useWebSocketContext();
 	const [inputValue, setInputValue] = useState("");
 
 	const clickHandler = () => {
-		const inputValueNum = Number(inputValue);
-		if (isNaN(inputValueNum)) {
-			console.error("JoinRoom component: Invalid number!");
-			return;
-		}
-
 		ws.current
-			? sendPayload(MsgType.JOIN, String(inputValueNum), null, null, null, ws.current)
+			? sendPayload(MsgType.JOIN, String(inputValue), null, null, null, ws.current)
 			: console.log("No socket");
 	};
 
 	return (
-		<div className={roomNumber != -1 ? "hidden" : ""} id="join-container">
+		<div className={room == "" ? "" : "hidden"} id="join-container">
 			<div className="join-room">
 				<input
-					type="number"
+					type="text"
 					id="room-number-input"
 					className="number-input"
 					value={inputValue}
@@ -34,7 +28,7 @@ function JoinRoom({ roomNumber }: Prop) {
 						setInputValue(e.target.value);
 					}}
 				/>
-				<button className="button-primary" id="join" onClick={clickHandler}>
+				<button className="button-secondary" id="join" onClick={clickHandler}>
 					Join room
 				</button>
 			</div>

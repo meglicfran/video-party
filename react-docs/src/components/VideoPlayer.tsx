@@ -50,6 +50,9 @@ function VideoPlayer({ videoSrc }: Prop) {
 
 		videoPlayer.current.src = videoSrc;
 		videoPlayer.current.load();
+
+		videoPlayer.current.currentTime = 0;
+		videoPlayer.current.pause();
 	}, [videoSrc]);
 
 	const timeUpdateHandler = () => {
