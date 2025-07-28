@@ -17,21 +17,14 @@ function VideoSelect({ onSrcChange }: Prop) {
 		if (!fileInput.current.files || fileInput.current.files.length === 0) return;
 
 		const file = fileInput.current.files[0];
-		var fileURL = window.URL.createObjectURL(file);
+		const fileURL = window.URL.createObjectURL(file);
 
 		onSrcChange(fileURL);
 	};
 
 	return (
 		<>
-			<input
-				className="button"
-				type="file"
-				accept="video/*"
-				id="fileInput"
-				ref={fileInput}
-				onChange={handleInputChange}
-			/>
+			<input type="file" accept="video/*" id="fileInput" ref={fileInput} onChange={handleInputChange} />
 			<button className="button-primary" id="submit" onClick={submitClickHandler}>
 				Select video
 			</button>

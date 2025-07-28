@@ -16,6 +16,8 @@ function VideoPlayer({ videoSrc }: Prop) {
 	const timeDisplay = useRef<HTMLParagraphElement>(null);
 	const volumeControl = useRef<HTMLDivElement>(null);
 	const volumeSlider = useRef<HTMLInputElement>(null);
+	const subInput = useRef<HTMLInputElement>(null);
+	const track = useRef<HTMLTrackElement>(null);
 
 	/* Video state change */
 	useEffect(() => {
@@ -97,11 +99,25 @@ function VideoPlayer({ videoSrc }: Prop) {
 			: console.log("No socket");
 	};
 
+	const handleSubChange = () => {
+		console.log("handleSubChange called");
+		console.log(`subInput.current = ${subInput.current}, track.current=${track.current}`);
+		if (!subInput.current || !track.current) return;
+
+		if (!subInput.current.files || subInput.current.files.length === 0) return;
+
+		const subFile = subInput.current.files[0];
+		const subURL = window.URL.createObjectURL(subFile);
+		console.log(`subURL = ${subURL}`);
+		track.current.src = subURL;
+	};
+
 	return (
 		<>
 			<div className="player-container">
 				<video id="player" ref={videoPlayer} onTimeUpdate={timeUpdateHandler} onClick={stopPlayClickHandler}>
 					<source src={videoSrc} type="video/webm" />
+					<track src={"sub.srt"} kind="subtitles" label="Custom subtitles" default ref={track} />
 					<p>Error loading video</p>
 				</video>
 				<div className="control-container">
@@ -136,6 +152,15 @@ function VideoPlayer({ videoSrc }: Prop) {
 								videoPlayer.current.volume = value;
 							}}
 						/>
+					</div>
+					<input className="hidden" type="file" accept=".vtt" onChange={handleSubChange} ref={subInput} />
+					<div
+						className="cc-button"
+						onClick={() => {
+							subInput.current?.click();
+						}}
+					>
+						<i className="fa-solid fa-closed-captioning"></i>
 					</div>
 				</div>
 			</div>

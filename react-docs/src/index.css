@@ -194,6 +194,21 @@ body {
 	width: 100px;
 }
 
+.cc-button {
+	font-size: 18pt;
+	background-color: transparent;
+	border: none;
+	margin: 5px;
+	color: #fbfbfe;
+	display: flex;
+	justify-content: center;
+	margin-left: 15px;
+}
+
+.cc-button:hover {
+	cursor: pointer;
+}
+
 .status-container {
 	margin-top: 50px;
 	display: flex;
