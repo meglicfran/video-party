@@ -8,6 +8,7 @@
     "dev": "ts-node src/server.ts"
   },
   "dependencies": {
+    "nanoid": "^5.1.5",
     "uuid": "^11.1.0",
     "ws": "^8.18.3"
   },

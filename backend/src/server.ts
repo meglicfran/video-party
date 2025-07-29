@@ -1,6 +1,7 @@
 console.log("Hello!");
 import WebSocket from "ws";
 import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 
 /*
 Websocket message:
@@ -77,7 +78,7 @@ wss.on("connection", (ws) => {
 				ws.send(JSON.stringify({ type: MsgType.ERROR, message: "No rooms left!" }));
 				return;
 			}
-			const newRoom = uuidv4();
+			const newRoom = nanoid(8);
 			const newClient = { ws: ws, id: clientId, room: newRoom };
 			clients.set(clientId, newClient);
 			addToMapArray(rooms, newRoom, clientId);
