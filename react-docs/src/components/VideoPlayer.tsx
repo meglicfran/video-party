@@ -18,6 +18,7 @@ function VideoPlayer({ videoSrc }: Prop) {
 	const volumeSlider = useRef<HTMLInputElement>(null);
 	const subInput = useRef<HTMLInputElement>(null);
 	const track = useRef<HTMLTrackElement>(null);
+	const playerContainer = useRef<HTMLDivElement>(null);
 
 	/* Video state change */
 	useEffect(() => {
@@ -112,9 +113,19 @@ function VideoPlayer({ videoSrc }: Prop) {
 		track.current.src = subURL;
 	};
 
+	const handleFullscreen = () => {
+		if (!playerContainer.current) return;
+
+		if (document.fullscreenElement === null) {
+			playerContainer.current.requestFullscreen();
+		} else {
+			document.exitFullscreen();
+		}
+	};
+
 	return (
 		<>
-			<div className="player-container">
+			<div className="player-container" ref={playerContainer}>
 				<video id="player" ref={videoPlayer} onTimeUpdate={timeUpdateHandler} onClick={stopPlayClickHandler}>
 					<source src={videoSrc} type="video/webm" />
 					<track src={"sub.srt"} kind="subtitles" label="Custom subtitles" default ref={track} />
@@ -161,6 +172,9 @@ function VideoPlayer({ videoSrc }: Prop) {
 						}}
 					>
 						<i className="fa-solid fa-closed-captioning"></i>
+					</div>
+					<div className="fullscreen-button" onClick={handleFullscreen}>
+						<i className="fa-solid fa-expand"></i>
 					</div>
 				</div>
 			</div>
