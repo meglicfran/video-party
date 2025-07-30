@@ -77,10 +77,10 @@ function App() {
 			} else if (payloadObj.type == MsgType.SYNC) {
 				handleSync(payloadObj);
 			}
+		};
 
-			return () => {
-				ws.current?.close();
-			};
+		return () => {
+			ws.current?.close();
 		};
 	}, []);
 
