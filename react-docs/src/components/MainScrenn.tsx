@@ -1,6 +1,6 @@
 import LeaveRoomControl from "./LeaveRoomControl";
 import VideoPlayer from "./VideoPlayer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VideoSelect from "./VideoSelect";
 
 interface Prop {
@@ -9,10 +9,13 @@ interface Prop {
 
 function MainScreen({ room }: Prop) {
 	const [videoSrc, updateVideoSrc] = useState("/flower.webm");
-
 	const handleSrcChange = (fileUrl: string) => {
 		updateVideoSrc(fileUrl);
 	};
+
+	useEffect(() => {
+		if (room === "") updateVideoSrc("");
+	}, [room]);
 
 	return (
 		<div className={room == "" ? "hidden" : "app-container"} id="app-container">
