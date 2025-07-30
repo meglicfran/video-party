@@ -56,6 +56,10 @@ function VideoPlayer({ videoSrc }: Prop) {
 
 		videoPlayer.current.currentTime = 0;
 		videoPlayer.current.pause();
+
+		videoPlayer.current.onloadedmetadata = () => {
+			timeUpdateHandler();
+		};
 	}, [videoSrc]);
 
 	const timeUpdateHandler = () => {
