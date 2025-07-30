@@ -103,11 +103,15 @@ wss.on("connection", (ws) => {
 
 	ws.on("close", () => {
 		const client = clients.get(clientId);
-		if (client === undefined || client.room === undefined) return;
-		console.log("Client disconnected");
-		removeFromMapArray(rooms, client.room, clientId);
+		if (client === undefined) return;
+
+		console.log(`Client ${clientId} disconnected`);
 		clients.delete(clientId);
 		printClients();
+
+		if (client.room === undefined) return;
+		removeFromMapArray(rooms, client.room, clientId);
+		printMapOfArrays(rooms);
 	});
 });
 
